@@ -19,6 +19,10 @@ class FirebaseWebRtcAdapter {
     this.peers = {}; // id -> WebRtcPeer
     this.occupants = {}; // id -> joinTimestamp
 
+    this.serverTimeRequests = 0;
+    this.timeOffsets = [];
+    this.avgTimeOffset = 0;
+
     config = config || window.firebaseConfig;
     this.firebase = firebase || window.firebase;
 
@@ -85,6 +89,8 @@ class FirebaseWebRtcAdapter {
     var self = this;
 
     this.initFirebase(function(id) {
+      self.updateTimeOffset();
+
       self.localId = id;
       var firebaseApp = self.firebaseApp;
 
@@ -252,6 +258,10 @@ class FirebaseWebRtcAdapter {
     }
   }
 
+  getMediaStream(clientId) {
+    return Promise.reject("Interface method not implemented: getMediaStream");
+  }
+
   /*
    * Privates
    */
@@ -380,6 +390,38 @@ class FirebaseWebRtcAdapter {
       callback(timestamp);
     });
     ref.onDisconnect().remove();
+  }
+
+  updateTimeOffset() {
+    return this.firebaseApp
+      .database()
+      .ref("/.info/serverTimeOffset")
+      .once("value")
+      .then(data => {
+        var timeOffset = data.val();
+
+        this.serverTimeRequests++;
+
+        if (this.serverTimeRequests <= 10) {
+          this.timeOffsets.push(timeOffset);
+        } else {
+          this.timeOffsets[this.serverTimeRequests % 10] = timeOffset;
+        }
+
+        this.avgTimeOffset =
+          this.timeOffsets.reduce((acc, offset) => (acc += offset), 0) /
+          this.timeOffsets.length;
+
+        if (this.serverTimeRequests > 10) {
+          setTimeout(() => this.updateTimeOffset(), 5 * 60 * 1000); // Sync clock every 5 minutes.
+        } else {
+          this.updateTimeOffset();
+        }
+      });
+  }
+
+  getServerTime() {
+    return new Date().getTime() + this.avgTimeOffset;
   }
 }
 
