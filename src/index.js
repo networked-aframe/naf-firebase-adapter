@@ -54,13 +54,13 @@ class FirebaseWebRtcAdapter {
   setWebRtcOptions(options) {
     // TODO: support audio and video
     if (options.datachannel === false)
-      console.warn(
+      NAF.log.warn(
         "FirebaseWebRtcAdapter.setWebRtcOptions: datachannel must be true."
       );
     if (options.audio === true)
-      console.warn("FirebaseWebRtcAdapter does not support audio yet.");
+      NAF.log.warn("FirebaseWebRtcAdapter does not support audio yet.");
     if (options.video === true)
-      console.warn("FirebaseWebRtcAdapter does not support video yet.");
+      NAF.log.warn("FirebaseWebRtcAdapter does not support video yet.");
   }
 
   setServerConnectListeners(successListener, failureListener) {
@@ -281,7 +281,7 @@ class FirebaseWebRtcAdapter {
 
       // TODO: support other auth type
       default:
-        console.log("FirebaseWebRtcInterface.auth: Unknown authType " + type);
+        NAF.log.log("FirebaseWebRtcInterface.auth: Unknown authType " + type);
         break;
     }
   }
@@ -304,7 +304,7 @@ class FirebaseWebRtcAdapter {
       .auth()
       .signInAnonymously()
       .catch(function(error) {
-        console.error("FirebaseWebRtcInterface.authAnonymous: " + error);
+        NAF.log.error("FirebaseWebRtcInterface.authAnonymous: " + error);
         self.connectFailure(null, error);
       });
 
@@ -324,7 +324,7 @@ class FirebaseWebRtcAdapter {
    *     - signal: used to send signal
    *     - data: used to send guaranteed data
    *   - /timestamp/: working path to get timestamp
-   *     - userId: 
+   *     - userId:
    */
 
   getRootPath() {

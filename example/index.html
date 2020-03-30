@@ -40,7 +40,6 @@
       authDomain: 'xxx.firebaseapp.com',
       databaseURL: 'https://xxx.firebaseio.com'
     };
-    console.error('You need to enter your own firebase credentials. Remove this error when you have.');
 
     // Define custom schema for syncing avatar color, set by random-color
     NAF.schemas.add({
@@ -57,8 +56,9 @@
     });
     // Called by Networked-Aframe when connected to server
     function onConnect() {
-      console.log("onConnect", new Date());
+      NAF.log.log("onConnect", new Date());
     }
+    console.error('You need to enter your own firebase credentials. Remove this error when you have.');
   </script>
 </head>
 
