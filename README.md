@@ -22,7 +22,7 @@ Steps to setup Firebase:
 
 1. [Sign up for a Firebase account](https://firebase.google.com/)
 2. Create a new Firebase project
-3. Go to Database -> Rules and change them to the following (warning: not safe for production, just developing)
+3. Go to Database -> Realtime Database -> Rules and change them to the following (warning: not safe for production, just developing)
 ```javascript
     {
       "rules": {
@@ -43,11 +43,13 @@ After setting up firebase include and configure `naf-firebase-adapter`.
 ```html
 <html>
 <head>
-  <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
   <script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js"></script>
   <!-- Include naf-firebase-adapter *after* networked-aframe -->
   <script src="https://unpkg.com/naf-firebase-adapter/dist/naf-firebase-adapter.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>/script>
 
   <!-- Set the Firebase credentials -->
   <script>
@@ -55,7 +57,12 @@ After setting up firebase include and configure `naf-firebase-adapter`.
       authType: 'none',
       apiKey: 'your-api-key',
       authDomain: 'xxx.firebaseapp.com',
-      databaseURL: 'https://xxx.firebaseio.com'
+      databaseURL: 'https://xxx.firebaseio.com',
+      projectId: "your-projectId",
+      storageBucket: "your-storageBucket",
+      messagingSenderId: "your-messagingSenderId",
+      appId: "your-appId",
+      measurementId: "your-measurementId"
     };
   </script>
 </head>
